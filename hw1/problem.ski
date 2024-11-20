@@ -25,10 +25,10 @@ def _3  = inc _2;
 # TASK: Implement the following functions.
 
 # BEGIN_YOUR_CODE
-def or     = I;
-def and    = I;
-def not    = I;
-def is_odd = I;
+def or = S I (K tt);
+def and = S S K;
+def not = S (S I (K ff)) (K tt);
+def is_odd = S (S I (K not)) (K ff);
 # END_YOUR_CODE
 
 #########
