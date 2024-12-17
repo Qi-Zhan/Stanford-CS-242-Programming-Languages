@@ -40,10 +40,28 @@
 ; Task: Implement `throw` and `try_except` using `call/cc`.
 ; Note: You can define any other helper functions.
 
+; (throw msg) should throw (or raise) an exception that carries a message msg.
 (define (throw msg)
-  (void)
+  (if (stack_empty?)
+    ((let* () (printf "ThrowError\n") (exit)))
+    (let*
+      ([pair (stack_pop)]
+       [k (first pair)]
+       [except_f (second pair)])
+      (k (except_f msg))
+    )
+  )
 )
 
+; (try except try f except f) should run (try f) and, if an exception is thrown by (throw msg) during
+; the evaluation of (try f), it should catch (or handle) the exception and run (except f msg) immediately
+; after the exception is thrown
 (define (try_except try_f except_f)
-  (void)
-)
+  ; "push the current continuation k and except_f to the stack"
+  (call/cc (lambda (k) (let* ()
+    (stack_push (list k except_f))
+    (let* ([result (try_f)])
+      (stack_pop)
+      (k result)
+    )
+  ))))
